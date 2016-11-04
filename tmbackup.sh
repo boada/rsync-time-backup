@@ -403,7 +403,11 @@ fn_backup() {
   while : ; do
     fn_rsync "$SRC_FOLDER" "$BACKUP" "$PREV_BACKUP" "$EXCLUDE_FILE"
     local RETVAL=$?
+    echo $RETVAL
     if [[ $RETVAL -eq 0 ]]; then
+      break
+    # this line keeps things going if we run into a permission denied
+    elif [[ $RETVAL -eq 23 ]]; then
       break
     else
       # Check if error was caused by to little space, TODO: find better way without log parsing
